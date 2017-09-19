@@ -68,7 +68,6 @@ Cấu hình Database của cacti
 
 Sau đó truy cập vào địa chỉ http://IP/cacti ta sẽ có màn hình như sau. Login bằng username và password đều là admin
 IP của em là : 45.124.95.108/cacti
-![](https://github.com/kidluc/SNMP-report/blob/master/9.png)
 Ta vào được khung cấu hình của cacti như sau
 ![](https://github.com/kidluc/SNMP-report/blob/master/10.png)
 

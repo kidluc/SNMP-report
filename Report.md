@@ -25,19 +25,68 @@ I. Tìm hiểu về SNMP
 **snmpinform**: lệnh này để xác nhận đã nhận được gói trap mesager mà manager gửi trả về cho agent qua INFORM message nếu không agent sẽ tiếp tục gửi cho manager gói *Trap message*
 
 II. Mô hình lab
-![](imgs/20170919-145600.png)
+![](https://github.com/kidluc/SNMP-report/blob/master/7.png)
 
 III. Cài đặt cacti giám sát traffix.
 Mô hình cài đặt
-![](imgs/20170919-145942.png)
+![](https://github.com/kidluc/SNMP-report/blob/master/8.png)
 
 B1: Cài đặt LAMP và các gói package phụ trợ trên SNMP Manager
 
 ``` sudo apt-get install apache2 mysql-server-5.6 php5 libapache2-mod-php5 ```
+Cài đặt và cấu hình MySQL-5.6 như bình thường.
 
 B2: Cài đặt SNMP Agent trên các SNMP Managed Machine.
-``` apt install snmp snmpd cacti-spine -y```
+``` apt install snmp snmpd ```
+Cài đặt file cấu hình snmp như sau:
+Tại file **/etc/snmp/snmp.conf** ta comment dòng mibs
+```
+# As the snmp packages come without MIB files due to license reasons, loading
+# of MIBs is disabled by default. If you added the MIBs you can reenable
+# loading them by commenting out the following line.
+#mibs :
+```
+
+Tại file **/etc/snmp/snmpd.conf** ta thêm một dòng nừa ở dòng thư 18
+```
+#agentAddress  udp:IP:161 (cấu trúc dòng được thêm vào)
+agentAddress  udp:103.56.158.32:161
+```
 
 B3: Cài đặt cacti trên SNMP manager system
+``` apt install cacti cacti-spine -y ```
+Khi cài đặt thì cacti sẽ hiện ra cấu hình như sau:
 
+![](https://github.com/kidluc/SNMP-report/blob/master/1.png)
 
+Chọn webserver để chạy cacti (ở đây em chọn mặc định là apache2)
+![](https://github.com/kidluc/SNMP-report/blob/master/2.png)
+Cấu hình cacti
+![](https://github.com/kidluc/SNMP-report/blob/master/3.png)
+Cấu hình Database của cacti
+![](https://github.com/kidluc/SNMP-report/blob/master/4.png)
+
+Sau đó truy cập vào địa chỉ http://IP/cacti ta sẽ có màn hình như sau. Login bằng username và password đều là admin
+IP của em là : 45.124.95.108/cacti
+![](https://github.com/kidluc/SNMP-report/blob/master/9.png)
+Ta vào được khung cấu hình của cacti như sau
+![](https://github.com/kidluc/SNMP-report/blob/master/10.png)
+
+Tại đây ta bắt đầu add Linux server để cacti giám sát
+Đầu tiên, tại mục console, ta chọn mục device
+![](https://github.com/kidluc/SNMP-report/blob/master/11.png)
+Sau đó ta chọn mục add để ra được màn hinh như sau, sau đó ta thêm vào các tùy chỉnh dành cho việc giám sát như miêu tả, IP - hostname, giao thức kiểm tra
+![](https://github.com/kidluc/SNMP-report/blob/master/12.png)
+Sau đó ta chọn mục save, nếu hiện thông báo về SNMP information có nghĩa là SNMP đã được cài đặt thành công.
+![](https://github.com/kidluc/SNMP-report/blob/master/13.png)
+
+Tiếp đó, để có thể graph được traffic đến server, ta chọn mục *Graph Tree* ở bảng console. Sau đó chọn mục add rồi cấu hình như hình sau rồi chọn save
+![](https://github.com/kidluc/SNMP-report/blob/master/14.png)
+Sau đó ta vào phần *New Graph* tick vào các graph sẽ được tạo ra rồi chọn create
+![](https://github.com/kidluc/SNMP-report/blob/master/15.png)
+Quay trở lại mục device để kiểm tra xem server đã UP hay chưa, nếu chưa thì ta nên đợi một lúc để cacti kết nối đến server.
+![](https://github.com/kidluc/SNMP-report/blob/master/16.png)
+
+Sau đó ta vào tab Graph ở phía trên để kiểm tra xem cacti đã bắt đầu việc giám sát chưa. Như hình dưới đây là cacti đã bắt đầu giám sát.
+![](https://github.com/kidluc/SNMP-report/blob/master/5.png)
+![](https://github.com/kidluc/SNMP-report/blob/master/6.png)
